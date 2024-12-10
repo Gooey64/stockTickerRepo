@@ -22,7 +22,7 @@ async function main() {
         app.use(express.urlencoded({ extended: true }));
 
         // Route for form submission
-        app.get('/stockApp.html', async (req, res) => {
+        app.get('stockApp.html', async (req, res) => {
             try {
                 const userInput = req.query.userInput;
                 const searchType = req.query.companyInput;
