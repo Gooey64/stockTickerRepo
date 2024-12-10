@@ -1,0 +1,19 @@
+{
+    "name": "stockApp",
+    "version": "1.0.0",
+    "description": "stock app ",
+    "main": "process.js",
+    "scripts": {
+    "start": "node process.js"
+  },
+    "repository": {
+    "type": "git",
+    "url": ""
+  },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+    "url": ""
+  },
+    "homepage": "stockApp.html"
+  }
