@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        
+    </head>
+    <body>
+        <form action ="process.js" method="get">
+            <div class = "formInput">
+                <label for="userInput">Enter the stock ticker symbol or company name</label>
+                <input type="text" id = "userInput">
+            </div>
+            <div class = "formInput">
+                <input type = "radio" id = "STS" name = "companyInput" value = "Stock Ticker Symbol">
+                <label for="STS">Stock Ticker Symbol</label>
+            </div>
+            <div class = "formInput">
+                <input type = "radio" id = "CN" name="companyInput" value = "Company Name">
+                <label for="CN">Company Name</label>
+            </div>
+            <div class = "formInput">
+                <input type="submit" value = "Submit">
+            </div>
+        </form>
+    </body>
+</html>

@@ -16,13 +16,13 @@ async function main() {
         const collection = db.collection("PublicCompanies");
 
         // Serve the HTML form (index page)
-        app.use(express.static('stockApp.html'));  // Serve static files from 'public' folder
+        app.use(express.static('index.html'));  // Serve static files from 'public' folder
 
         // Middleware to parse form data
         app.use(express.urlencoded({ extended: true }));
 
         // Route for form submission
-        app.get('stockApp.html', async (req, res) => {
+        app.get('index.html', async (req, res) => {
             try {
                 const userInput = req.query.userInput;
                 const searchType = req.query.companyInput;
