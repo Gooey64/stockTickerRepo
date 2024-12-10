@@ -1,19 +1,24 @@
 {
     "name": "stockApp",
     "version": "1.0.0",
-    "description": "stock app ",
+    "description": "stock app",
     "main": "process.js",
     "scripts": {
-    "start": "node process.js"
-  },
+      "start": "node process.js"
+    },
     "repository": {
-    "type": "git",
-    "url": ""
-  },
+      "type": "git",
+      "url": ""
+    },
     "author": "",
     "license": "ISC",
     "bugs": {
-    "url": ""
-  },
-    "homepage": "stockApp.html"
+      "url": ""
+    },
+    "homepage": "stockApp.html",
+    "dependencies": {
+      "express": "^4.18.2",
+      "mongodb": "^4.7.1"
+    }
   }
+  
