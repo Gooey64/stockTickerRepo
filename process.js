@@ -2,67 +2,66 @@ const express = require('express');
 const { MongoClient } = require('mongodb');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000; // Use Heroku's dynamic port
 
-//my mongodb url
+// MongoDB URL
 const url = "mongodb+srv://dbUser:Password@cluster0.w0aza.mongodb.net/";
 
+// Start the server and handle database logic
 async function main() {
     try {
-
-        //connects to database
-        const client = await MongoClient.connect(url);
-        
+        // Connect to the MongoDB client
+        const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
         const db = client.db("Stock");
         const collection = db.collection("PublicCompanies");
 
-        app.use(express.static('process.html'));
+        // Serve the HTML form (index page)
+        app.use(express.static('stockApp.html'));  // Serve static files from 'public' folder
 
-        app.use(express.urlencoded({ extended: true}));
+        // Middleware to parse form data
+        app.use(express.urlencoded({ extended: true }));
 
-        app.get('/process.html', async(req, res) => {
+        // Route for form submission
+        app.get('/process.html', async (req, res) => {
             try {
                 const userInput = req.query.userInput;
                 const searchType = req.query.companyInput;
 
-                let query = {}
-                if (searchType == "Stock Ticker Symbol") {
+                let query = {};
+                if (searchType === "Stock Ticker Symbol") {
                     query = { Ticker: userInput };
-                }
-                else if (searchType == "Company Name") {
+                } else if (searchType === "Company Name") {
                     query = { Company: userInput };
                 }
 
+                // Query MongoDB for matching records
                 const results = await collection.find(query).toArray();
 
-                console.log("Search Results: ", results);
+                // Log the results to the console
+                console.log("Search Results:", results);
 
-                res.send(
-                    '<h1>Search Results</h1>'
-                )
-
-            }
-            catch (err) {
-                console.error("Error: ", err);
-                res.status(500).send("Error");
+                // Send results to the client (extra credit: display in HTML)
+                res.send(`
+                    <h1>Search Results</h1>
+                    <ul>
+                        ${results.map(r => `<li>${r.Company} (${r.Ticker}): $${r.Price}</li>`).join('')}
+                    </ul>
+                `);
+            } catch (err) {
+                console.error("Error:", err);
+                res.status(500).send("An error occurred while processing your request.");
             }
         });
-        
-        //closes database connection
-        await client.close();
-        }
-    catch (err) {
+
+        // Start the server
+        app.listen(port, () => {
+            console.log(`Server running at http://localhost:${port}`);
+        });
+
+    } catch (err) {
         console.error("An error occurred:", err);
     }
-    
 }
 
-//function that reads the CSV file
-function readCSV(fileName) {
-    
-}
-
+// Run the application
 main();
-
-
-
