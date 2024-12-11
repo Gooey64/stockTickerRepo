@@ -38,9 +38,9 @@ async function main() {
                 }
 
                 // Query MongoDB for matching records
-                // const results = await collection.find(query).toArray();
-                const results = await collection.find().toArray();
-                console.log(results.length);
+                const results = await collection.find(query).toArray();
+                // const results = await collection.find().toArray();
+                // console.log(results.length);
 
                 // Log the results to the console
                 console.log("Search Results:", results);
