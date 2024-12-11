@@ -34,12 +34,13 @@ async function main() {
                 if (searchType === "Stock Ticker Symbol") {
                     query = {Ticker:{$eq:userInput}};
                 } else if (searchType === "Company Name") {
-                    query = {Ticker:{$eq:userInput}};
+                    query = {Company:{$eq:userInput}};
                 }
 
                 // Query MongoDB for matching records
                 // const results = await collection.find(query).toArray();
-                const results = await collection.find();
+                const results = await collection.find().toArray();
+                console.log(results.length);
 
                 // Log the results to the console
                 console.log("Search Results:", results);
