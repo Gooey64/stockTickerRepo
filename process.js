@@ -28,19 +28,20 @@ async function main() {
         app.get('/process.html', async (req, res) => {
             try {
                 const userInput = req.query.userInput;
+                console.log("user input: " + userInput);
                 const searchType = req.query.companyInput;
 
                 let query = {};
                 if (searchType === "Stock Ticker Symbol") {
-                    query = {Ticker:{$eq:userInput}};
+                    query = {Ticker: userInput};
                 } else if (searchType === "Company Name") {
-                    query = {Company:{$eq:userInput}};
+                    query = {Company:userInput};
                 }
 
                 // Query MongoDB for matching records
                 const results = await collection.find(query).toArray();
                 // const results = await collection.find().toArray();
-                // console.log(results.length);
+                console.log(results.length)
 
                 // Log the results to the console
                 console.log("Search Results:", results);
