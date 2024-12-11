@@ -3,7 +3,7 @@ const { MongoClient } = require('mongodb');
 const path = require('path');
 
 const app = express();
-const port = process.env.PORT || 3000; // Use Heroku's dynamic port
+const port = process.env.PORT || 3000; // Use Heroku's dynamic port or default to 3000
 
 // MongoDB URL
 const url = "mongodb+srv://dbUser:Password@cluster0.w0aza.mongodb.net/";
@@ -16,14 +16,12 @@ async function main() {
         const db = client.db("Stock");
         const collection = db.collection("PublicCompanies");
 
-        // Serve the HTML form (index page)
-        app.use(express.static('index.html'));  // Serve static files from 'public' folder
-
         // Middleware to parse form data
         app.use(express.urlencoded({ extended: true }));
 
+        // Serve the HTML form (index page)
         app.get('/', (req, res) => {
-            res.sendFile(path.join(_dirname, 'stockApp.html'));
+            res.sendFile(path.join(__dirname, 'stockApp.html'));
         });
 
         // Route for form submission
@@ -45,13 +43,17 @@ async function main() {
                 // Log the results to the console
                 console.log("Search Results:", results);
 
-                // Send results to the client (extra credit: display in HTML)
-                res.send(`
-                    <h1>Search Results</h1>
-                    <ul>
-                        ${results.map(r => `<li>${r.Company} (${r.Ticker}): $${r.Price}</li>`).join('')}
-                    </ul>
-                `);
+                // Send results to the client
+                if (results.length > 0) {
+                    res.send(`
+                        <h1>Search Results</h1>
+                        <ul>
+                            ${results.map(r => `<li>${r.Company} (${r.Ticker}): $${r.Price}</li>`).join('')}
+                        </ul>
+                    `);
+                } else {
+                    res.send("<h1>No Results Found</h1>");
+                }
             } catch (err) {
                 console.error("Error:", err);
                 res.status(500).send("An error occurred while processing your request.");
