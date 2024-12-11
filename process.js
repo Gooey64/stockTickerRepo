@@ -32,7 +32,7 @@ async function main() {
 
                 let query = {};
                 if (searchType === "Stock Ticker Symbol") {
-                    query = { Ticker: userInput };
+                    query = collection.find({Ticker:{$eq:userInput}});
                 } else if (searchType === "Company Name") {
                     query = { Company: userInput };
                 }
