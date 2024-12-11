@@ -1,5 +1,6 @@
 const express = require('express');
 const { MongoClient } = require('mongodb');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 3000; // Use Heroku's dynamic port
@@ -21,8 +22,12 @@ async function main() {
         // Middleware to parse form data
         app.use(express.urlencoded({ extended: true }));
 
+        app.get('/', (req, res) => {
+            res.sendFile(path.join(_dirname, 'stockApp.html'));
+        });
+
         // Route for form submission
-        app.get('index.html', async (req, res) => {
+        app.get('/process.html', async (req, res) => {
             try {
                 const userInput = req.query.userInput;
                 const searchType = req.query.companyInput;
