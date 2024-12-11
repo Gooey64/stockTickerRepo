@@ -3,34 +3,33 @@ const { MongoClient } = require('mongodb');
 const path = require('path');
 
 const app = express();
-const port = process.env.PORT || 3000; // Use Heroku's dynamic port or default to 3000
+const port = process.env.PORT || 3000;
 
-// MongoDB URL
 const url = "mongodb+srv://dbUser:Password@cluster0.w0aza.mongodb.net/";
 
-// Start the server and handle database logic
 async function main() {
     try {
-        // Connect to the MongoDB client
+        //connect to database
         const client = await MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
         const db = client.db("Stock");
         const collection = db.collection("PublicCompanies");
 
-        // Middleware to parse form data
         app.use(express.urlencoded({ extended: true }));
 
-        // Serve the HTML form (index page)
+        //get the HTML form data
         app.get('/', (req, res) => {
             res.sendFile(path.join(__dirname, 'stockApp.html'));
         });
 
-        // Route for form submission
+        //process the html form data
         app.get('/process.html', async (req, res) => {
             try {
+                //get user input from the form
                 const userInput = req.query.userInput;
                 console.log("user input: " + userInput);
                 const searchType = req.query.companyInput;
-
+                
+                //determine query based on radio button values
                 let query = {};
                 if (searchType === "Stock Ticker Symbol") {
                     query = {Ticker: userInput};
@@ -38,15 +37,12 @@ async function main() {
                     query = {Company:userInput};
                 }
 
-                // Query MongoDB for matching records
+                //query mongodb for matching results
                 const results = await collection.find(query).toArray();
-                // const results = await collection.find().toArray();
-                console.log(results.length)
 
-                // Log the results to the console
                 console.log("Search Results:", results);
 
-                // Send results to the client
+                //send results to process.html
                 if (results.length > 0) {
                     res.send(`
                         <h1>Search Results</h1>
@@ -57,13 +53,16 @@ async function main() {
                 } else {
                     res.send("<h1>No Results Found</h1>");
                 }
-            } catch (err) {
+                
+            }
+            //catch errors
+            catch (err) {
                 console.error("Error:", err);
                 res.status(500).send("An error occurred while processing your request.");
             }
         });
 
-        // Start the server
+        //start server
         app.listen(port, () => {
             console.log(`Server running at http://localhost:${port}`);
         });
@@ -73,5 +72,5 @@ async function main() {
     }
 }
 
-// Run the application
+//run app
 main();
