@@ -32,9 +32,9 @@ async function main() {
 
                 let query = {};
                 if (searchType === "Stock Ticker Symbol") {
-                    query = collection.find({Ticker:{$eq:userInput}});
+                    query = {Ticker:{$eq:userInput}};
                 } else if (searchType === "Company Name") {
-                    query = { Company: userInput };
+                    query = {Ticker:{$eq:userInput}};
                 }
 
                 // Query MongoDB for matching records
